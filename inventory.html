@@ -8,7 +8,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap');
-
   :root {
     --green-dark: #2d4a2d;
     --green-mid: #4a7c4a;
@@ -27,449 +26,156 @@
     --border: #c8dcc8;
     --shadow: rgba(45,74,45,0.12);
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--cream);
-    color: var(--text);
-    min-height: 100vh;
-  }
-
-  /* ── HEADER ── */
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; }
   header {
-    background: var(--green-dark);
-    padding: 18px 32px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
+    background: var(--green-dark); padding: 18px 32px; display: flex; align-items: center;
+    justify-content: space-between; gap: 16px; position: sticky; top: 0; z-index: 100;
     box-shadow: 0 2px 12px rgba(0,0,0,0.25);
   }
-  header h1 {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.4rem;
-    color: var(--cream);
-    letter-spacing: 0.01em;
-  }
+  header h1 { font-family: 'DM Serif Display', serif; font-size: 1.4rem; color: var(--cream); letter-spacing: 0.01em; }
   header h1 span { color: var(--green-light); }
   .header-right { display: flex; align-items: center; gap: 12px; }
   #lock-indicator {
-    font-size: 0.78rem;
-    color: var(--green-light);
-    display: flex; align-items: center; gap: 6px;
-    cursor: pointer;
-    padding: 6px 12px;
-    border: 1px solid var(--green-mid);
-    border-radius: 20px;
-    transition: all 0.2s;
+    font-size: 0.78rem; color: var(--green-light); display: flex; align-items: center; gap: 6px;
+    cursor: pointer; padding: 6px 12px; border: 1px solid var(--green-mid); border-radius: 20px; transition: all 0.2s;
   }
   #lock-indicator:hover { background: rgba(255,255,255,0.1); }
   #lock-indicator.unlocked { color: var(--gold); border-color: var(--gold); }
   #box-status {
-    font-size: 0.78rem;
-    padding: 6px 14px;
-    border-radius: 20px;
-    border: none;
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 500;
-    transition: all 0.2s;
+    font-size: 0.78rem; padding: 6px 14px; border-radius: 20px; border: none; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; font-weight: 500; transition: all 0.2s;
   }
   #box-status.disconnected { background: var(--clay); color: white; }
   #box-status.connected { background: var(--green-light); color: var(--green-dark); }
   #box-status.loading { background: var(--gold); color: var(--green-dark); }
-
-  /* ── TOOLBAR ── */
   .toolbar {
-    background: white;
-    border-bottom: 1px solid var(--border);
-    padding: 12px 32px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
+    background: white; border-bottom: 1px solid var(--border); padding: 12px 32px;
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
   }
-  .search-wrap {
-    position: relative;
-    flex: 1;
-    min-width: 200px;
-    max-width: 380px;
-  }
-  .search-wrap svg {
-    position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--text-light);
-  }
+  .search-wrap { position: relative; flex: 1; min-width: 200px; max-width: 380px; }
+  .search-wrap svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-light); }
   #search {
-    width: 100%;
-    padding: 8px 12px 8px 36px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.88rem;
-    background: var(--green-faint);
-    color: var(--text);
-    outline: none;
-    transition: border-color 0.2s;
+    width: 100%; padding: 8px 12px 8px 36px; border: 1px solid var(--border); border-radius: 8px;
+    font-family: 'DM Sans', sans-serif; font-size: 0.88rem; background: var(--green-faint);
+    color: var(--text); outline: none; transition: border-color 0.2s;
   }
   #search:focus { border-color: var(--green-mid); }
-
   .filter-btn {
-    padding: 7px 14px;
-    border-radius: 20px;
-    border: 1px solid var(--border);
-    background: white;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.82rem;
-    color: var(--text-mid);
-    cursor: pointer;
-    transition: all 0.18s;
+    padding: 7px 14px; border-radius: 20px; border: 1px solid var(--border); background: white;
+    font-family: 'DM Sans', sans-serif; font-size: 0.82rem; color: var(--text-mid); cursor: pointer; transition: all 0.18s;
   }
-  .filter-btn.active {
-    background: var(--green-dark);
-    color: white;
-    border-color: var(--green-dark);
-  }
+  .filter-btn.active { background: var(--green-dark); color: white; border-color: var(--green-dark); }
   .filter-btn:hover:not(.active) { border-color: var(--green-mid); color: var(--green-dark); }
-
   .toolbar-spacer { flex: 1; }
-
-  .stats-pill {
-    font-size: 0.8rem;
-    color: var(--text-light);
-    white-space: nowrap;
-  }
+  .stats-pill { font-size: 0.8rem; color: var(--text-light); white-space: nowrap; }
   .stats-pill strong { color: var(--green-dark); }
-
-  /* ── SUMMARY CARDS ── */
   .summary-bar {
-    display: flex;
-    gap: 12px;
-    padding: 16px 32px;
-    background: var(--green-faint);
-    border-bottom: 1px solid var(--border);
-    flex-wrap: wrap;
+    display: flex; gap: 12px; padding: 16px 32px; background: var(--green-faint);
+    border-bottom: 1px solid var(--border); flex-wrap: wrap;
   }
   .summary-card {
-    background: white;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 12px 20px;
-    min-width: 120px;
-    text-align: center;
-    box-shadow: 0 1px 4px var(--shadow);
+    background: white; border: 1px solid var(--border); border-radius: 10px;
+    padding: 12px 20px; min-width: 120px; text-align: center; box-shadow: 0 1px 4px var(--shadow);
   }
-  .summary-card .num {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.6rem;
-    color: var(--green-dark);
-    line-height: 1;
-  }
+  .summary-card .num { font-family: 'DM Serif Display', serif; font-size: 1.6rem; color: var(--green-dark); line-height: 1; }
   .summary-card .num.zero { color: var(--text-light); }
   .summary-card .num.warn { color: var(--clay); }
-  .summary-card .lbl {
-    font-size: 0.72rem;
-    color: var(--text-light);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    margin-top: 4px;
-  }
-
-  /* ── TABLE ── */
-  .table-wrap {
-    overflow-x: auto;
-    padding: 0 32px 32px;
-  }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 0;
-    font-size: 0.875rem;
-  }
+  .summary-card .lbl { font-size: 0.72rem; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 4px; }
+  .table-wrap { overflow-x: auto; padding: 0 32px 32px; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
   thead th {
-    background: var(--green-dark);
-    color: var(--cream);
-    padding: 10px 12px;
-    text-align: left;
-    font-weight: 500;
-    font-size: 0.78rem;
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
-    white-space: nowrap;
-    position: sticky;
-    top: 58px;
-    z-index: 10;
+    background: var(--green-dark); color: var(--cream); padding: 10px 12px; text-align: left;
+    font-weight: 500; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.07em;
+    white-space: nowrap; position: sticky; top: 58px; z-index: 10;
   }
-  thead th:first-child { border-radius: 0; }
-  tbody tr {
-    border-bottom: 1px solid var(--border);
-    transition: background 0.12s;
-  }
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.12s; }
   tbody tr:hover { background: var(--green-faint); }
   tbody tr.zero-row { background: #fafafa; }
   tbody tr.zero-row td { color: var(--text-light); }
-  tbody td {
-    padding: 9px 12px;
-    vertical-align: middle;
-  }
+  tbody td { padding: 9px 12px; vertical-align: middle; }
   .plant-name { font-weight: 500; color: var(--text); }
   .plant-sci { font-style: italic; font-size: 0.82rem; color: var(--text-mid); }
   .plant-detail { font-size: 0.78rem; color: var(--text-light); }
-
-  .count-cell {
-    text-align: center;
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--green-dark);
-    min-width: 60px;
-  }
-  .count-cell.zero { color: var(--text-light); }
-
-  /* Count controls */
-  .count-controls {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    justify-content: center;
-  }
+  .count-controls { display: flex; align-items: center; gap: 6px; justify-content: center; }
   .count-btn {
-    width: 28px; height: 28px;
-    border-radius: 50%;
-    border: 1px solid var(--border);
-    background: white;
-    cursor: pointer;
-    font-size: 1rem;
-    line-height: 1;
-    color: var(--green-dark);
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.15s;
-    font-weight: 600;
+    width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border); background: white;
+    cursor: pointer; font-size: 1rem; color: var(--green-dark); display: flex; align-items: center;
+    justify-content: center; transition: all 0.15s; font-weight: 600;
   }
   .count-btn:hover { background: var(--green-pale); border-color: var(--green-mid); }
   .count-btn.decrement:hover { background: var(--red-pale); border-color: var(--red); color: var(--red); }
   .count-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-  .count-val {
-    min-width: 36px;
-    text-align: center;
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.1rem;
-    color: var(--green-dark);
-  }
+  .count-val { min-width: 36px; text-align: center; font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: var(--green-dark); }
   .count-val.zero { color: var(--text-light); }
-
-  /* Print qty input */
   .print-qty {
-    width: 54px;
-    padding: 4px 6px;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.85rem;
-    text-align: center;
-    color: var(--text);
-    background: var(--green-faint);
+    width: 54px; padding: 4px 6px; border: 1px solid var(--border); border-radius: 6px;
+    font-family: 'DM Sans', sans-serif; font-size: 0.85rem; text-align: center;
+    color: var(--text); background: var(--green-faint);
   }
   .print-qty:focus { outline: none; border-color: var(--green-mid); }
-
   .print-row-btn {
-    padding: 4px 10px;
-    background: var(--green-dark);
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 0.78rem;
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-    white-space: nowrap;
-    transition: background 0.15s;
+    padding: 4px 10px; background: var(--green-dark); color: white; border: none; border-radius: 6px;
+    font-size: 0.78rem; cursor: pointer; font-family: 'DM Sans', sans-serif; white-space: nowrap; transition: background 0.15s;
   }
   .print-row-btn:hover { background: var(--green-mid); }
-
-  /* ── PIN MODAL ── */
   .modal-overlay {
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.55);
-    display: flex; align-items: center; justify-content: center;
-    z-index: 1000;
-    opacity: 0; pointer-events: none;
-    transition: opacity 0.2s;
+    position: fixed; inset: 0; background: rgba(0,0,0,0.55); display: flex; align-items: center;
+    justify-content: center; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.2s;
   }
   .modal-overlay.show { opacity: 1; pointer-events: all; }
   .modal {
-    background: white;
-    border-radius: 16px;
-    padding: 36px 40px;
-    max-width: 360px;
-    width: 90%;
-    box-shadow: 0 24px 64px rgba(0,0,0,0.3);
-    transform: translateY(12px);
-    transition: transform 0.2s;
-    text-align: center;
+    background: white; border-radius: 16px; padding: 36px 40px; max-width: 360px; width: 90%;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.3); transform: translateY(12px); transition: transform 0.2s; text-align: center;
   }
   .modal-overlay.show .modal { transform: translateY(0); }
-  .modal h2 {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.5rem;
-    color: var(--green-dark);
-    margin-bottom: 8px;
-  }
+  .modal h2 { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: var(--green-dark); margin-bottom: 8px; }
   .modal p { color: var(--text-mid); font-size: 0.9rem; margin-bottom: 24px; }
-  .pin-dots {
-    display: flex; gap: 12px; justify-content: center; margin-bottom: 20px;
-  }
-  .pin-dot {
-    width: 14px; height: 14px;
-    border-radius: 50%;
-    border: 2px solid var(--border);
-    background: white;
-    transition: all 0.15s;
-  }
+  .pin-dots { display: flex; gap: 12px; justify-content: center; margin-bottom: 20px; }
+  .pin-dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--border); background: white; transition: all 0.15s; }
   .pin-dot.filled { background: var(--green-dark); border-color: var(--green-dark); }
-  .pin-keypad {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin-bottom: 16px;
-  }
+  .pin-keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
   .pin-key {
-    padding: 14px;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    background: var(--green-faint);
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--text);
-    cursor: pointer;
-    transition: all 0.12s;
-    font-family: 'DM Sans', sans-serif;
+    padding: 14px; border: 1px solid var(--border); border-radius: 10px; background: var(--green-faint);
+    font-size: 1.1rem; font-weight: 600; color: var(--text); cursor: pointer; transition: all 0.12s; font-family: 'DM Sans', sans-serif;
   }
   .pin-key:hover { background: var(--green-pale); border-color: var(--green-mid); }
-  .pin-key.wide { grid-column: span 2; }
   .pin-error { color: var(--red); font-size: 0.85rem; margin-top: 8px; min-height: 20px; }
-  .modal-cancel {
-    background: none; border: none; color: var(--text-light);
-    font-size: 0.85rem; cursor: pointer; margin-top: 8px;
-    font-family: 'DM Sans', sans-serif;
-  }
+  .modal-cancel { background: none; border: none; color: var(--text-light); font-size: 0.85rem; cursor: pointer; margin-top: 8px; font-family: 'DM Sans', sans-serif; }
   .modal-cancel:hover { color: var(--text); }
-
-  /* ── BOX CONNECT MODAL ── */
-  #connect-modal .modal { max-width: 420px; }
-  #connect-modal h2 { margin-bottom: 12px; }
-  .box-logo { font-size: 2.5rem; margin-bottom: 8px; }
-  .btn-primary {
-    width: 100%;
-    padding: 13px;
-    background: var(--green-dark);
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-family: 'DM Serif Display', serif;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background 0.15s;
-    margin-top: 8px;
-  }
-  .btn-primary:hover { background: var(--green-mid); }
-
-  /* ── LOADING STATE ── */
   #loading-screen {
-    position: fixed; inset: 0;
-    background: var(--cream);
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    z-index: 500;
-    gap: 20px;
+    position: fixed; inset: 0; background: var(--cream); display: flex; flex-direction: column;
+    align-items: center; justify-content: center; z-index: 500; gap: 20px;
   }
   #loading-screen.hidden { display: none; }
-  .spinner {
-    width: 48px; height: 48px;
-    border: 3px solid var(--border);
-    border-top-color: var(--green-mid);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-  }
+  .spinner { width: 48px; height: 48px; border: 3px solid var(--border); border-top-color: var(--green-mid); border-radius: 50%; animation: spin 0.8s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
-  #loading-screen p {
-    color: var(--text-mid);
-    font-size: 0.95rem;
-  }
-
-  /* ── EMPTY STATE ── */
-  #empty-state {
-    text-align: center;
-    padding: 80px 32px;
-    color: var(--text-light);
-  }
+  #loading-screen p { color: var(--text-mid); font-size: 0.95rem; }
+  #empty-state { text-align: center; padding: 80px 32px; color: var(--text-light); }
   #empty-state .icon { font-size: 3rem; margin-bottom: 16px; }
-  #empty-state h3 {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.3rem;
-    color: var(--text-mid);
-    margin-bottom: 8px;
-  }
-
-  /* ── TOAST ── */
+  #empty-state h3 { font-family: 'DM Serif Display', serif; font-size: 1.3rem; color: var(--text-mid); margin-bottom: 8px; }
   #toast {
-    position: fixed;
-    bottom: 24px; right: 24px;
-    background: var(--green-dark);
-    color: white;
-    padding: 12px 20px;
-    border-radius: 10px;
-    font-size: 0.88rem;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
-    transform: translateY(80px);
-    opacity: 0;
-    transition: all 0.25s;
-    z-index: 900;
-    max-width: 320px;
+    position: fixed; bottom: 24px; right: 24px; background: var(--green-dark); color: white;
+    padding: 12px 20px; border-radius: 10px; font-size: 0.88rem; box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    transform: translateY(80px); opacity: 0; transition: all 0.25s; z-index: 900; max-width: 320px;
   }
   #toast.show { transform: translateY(0); opacity: 1; }
   #toast.error { background: var(--red); }
-
-  /* ── PRINT ALL BAR ── */
   .print-bar {
-    background: var(--green-pale);
-    border-top: 1px solid var(--border);
-    padding: 12px 32px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
+    background: var(--green-pale); border-top: 1px solid var(--border); padding: 12px 32px;
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
   }
   .print-bar span { font-size: 0.88rem; color: var(--text-mid); flex: 1; }
-  .print-bar-btn {
-    padding: 9px 20px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.88rem;
-    font-weight: 500;
-    transition: all 0.15s;
-  }
+  .print-bar-btn { padding: 9px 20px; border-radius: 8px; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 0.88rem; font-weight: 500; transition: all 0.15s; }
   .print-bar-btn.primary { background: var(--green-dark); color: white; }
   .print-bar-btn.primary:hover { background: var(--green-mid); }
   .print-bar-btn.secondary { background: white; color: var(--text-mid); border: 1px solid var(--border); }
   .print-bar-btn.secondary:hover { border-color: var(--green-mid); color: var(--green-dark); }
-
-  .checkbox-col { width: 36px; text-align: center; }
   input[type="checkbox"] { accent-color: var(--green-dark); width: 16px; height: 16px; cursor: pointer; }
-
   .col-actions { width: 180px; }
   .col-count { width: 110px; text-align: center; }
   .col-print-qty { width: 70px; text-align: center; }
   .col-check { width: 36px; }
-
   @media (max-width: 768px) {
     header { padding: 12px 16px; }
     .toolbar { padding: 10px 16px; }
@@ -482,13 +188,11 @@
 </head>
 <body>
 
-<!-- Loading -->
-<div id="loading-screen" class="hidden">
+<div id="loading-screen">
   <div class="spinner"></div>
-  <p id="loading-msg">Loading inventory…</p>
+  <p id="loading-msg">Connecting to Box…</p>
 </div>
 
-<!-- PIN Modal -->
 <div class="modal-overlay" id="pin-modal">
   <div class="modal">
     <h2>🌿 Coordinator Access</h2>
@@ -518,48 +222,21 @@
   </div>
 </div>
 
-<!-- Box Connect Modal -->
-<div class="modal-overlay" id="connect-modal">
-  <div class="modal">
-    <div class="box-logo">📦</div>
-    <h2>Connect to Box</h2>
-    <p>Sign in with Box to load your plant inventory. You'll be redirected to Box and back automatically.</p>
-    <button class="btn-primary" onclick="startBoxAuth()">Sign in with Box</button>
-    <br>
-    <button class="modal-cancel" onclick="document.getElementById('connect-modal').classList.remove('show')">Cancel</button>
-  </div>
-</div>
-
-<!-- Header -->
 <header>
   <h1>🌱 MG Plant Sale <span>2026</span> — Inventory</h1>
   <div class="header-right">
     <div id="lock-indicator" onclick="toggleLock()">🔒 View Only</div>
-    <button id="box-status" class="disconnected" onclick="handleBoxBtn()">Connect Box</button>
+    <button id="box-status" class="loading" onclick="loadFromBox()">🔄 Reload Box</button>
   </div>
 </header>
 
-<!-- Summary cards -->
 <div class="summary-bar" id="summary-bar" style="display:none">
-  <div class="summary-card">
-    <div class="num" id="sum-total">—</div>
-    <div class="lbl">Total Plants</div>
-  </div>
-  <div class="summary-card">
-    <div class="num" id="sum-labels">—</div>
-    <div class="lbl">Total Labels</div>
-  </div>
-  <div class="summary-card">
-    <div class="num warn" id="sum-zero">—</div>
-    <div class="lbl">Need Labels</div>
-  </div>
-  <div class="summary-card">
-    <div class="num" id="sum-new">—</div>
-    <div class="lbl">New This Load</div>
-  </div>
+  <div class="summary-card"><div class="num" id="sum-total">—</div><div class="lbl">Total Plants</div></div>
+  <div class="summary-card"><div class="num" id="sum-labels">—</div><div class="lbl">Total Labels</div></div>
+  <div class="summary-card"><div class="num warn" id="sum-zero">—</div><div class="lbl">Need Labels</div></div>
+  <div class="summary-card"><div class="num" id="sum-new">—</div><div class="lbl">New This Load</div></div>
 </div>
 
-<!-- Toolbar -->
 <div class="toolbar" id="toolbar" style="display:none">
   <div class="search-wrap">
     <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -567,14 +244,13 @@
     </svg>
     <input id="search" placeholder="Search plants…" oninput="renderTable()">
   </div>
-  <button class="filter-btn active" data-filter="all" onclick="setFilter('all',this)">All</button>
-  <button class="filter-btn" data-filter="zero" onclick="setFilter('zero',this)">Needs Labels</button>
-  <button class="filter-btn" data-filter="has" onclick="setFilter('has',this)">Has Labels</button>
+  <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
+  <button class="filter-btn" onclick="setFilter('zero',this)">Needs Labels</button>
+  <button class="filter-btn" onclick="setFilter('has',this)">Has Labels</button>
   <div class="toolbar-spacer"></div>
   <span class="stats-pill" id="showing-count"></span>
 </div>
 
-<!-- Table -->
 <div class="table-wrap" id="table-wrap" style="display:none">
   <div id="empty-state" style="display:none">
     <div class="icon">🔍</div>
@@ -597,42 +273,37 @@
   </table>
 </div>
 
-<!-- Print/action bar -->
 <div class="print-bar" id="print-bar" style="display:none">
   <span id="selected-info">Select plants above to print labels</span>
   <button class="print-bar-btn secondary" onclick="clearSelection()">Clear</button>
   <button class="print-bar-btn primary" onclick="printSelected()">🖨 Print Selected Labels</button>
 </div>
 
-<!-- Toast -->
 <div id="toast"></div>
 
 <script>
 // ── CONFIG ──────────────────────────────────────────────────────────
-const CLIENT_ID = 'x3ixs5oxduno805mt5xstnf6ytgslz5e';
-const REDIRECT_URI = 'https://annethorne.github.io/2026-Plant-Labels/inventory.html';
 const PIN = '2449';
 const STORAGE_KEY = 'mg_plant_inventory_2026';
 const FOLDER_PATH = ['MGV Expo and Plant Sale', '_Organization - Subcommittee'];
+const DEV_TOKEN = 'e4zh6Pp22BAsWnkeDvQjQl7wjkdPX7WX';
 
-// Avery 5266 label constants (matches index.html)
+// Avery 5266 label constants
 const TOP_M=42, LEFT_M=49.5, LBL_W=247.5, LBL_H=48, COL_GAP=43, PAD=2;
 const COLS=2, ROWS=15;
 
 // ── STATE ────────────────────────────────────────────────────────────
-let plants = [];       // [{id, line1, line2, line3, commonName, sciName, cultivar, color, count}]
-let counts = {};       // {id: number}  — live inventory, persisted to localStorage
+let plants = [];
+let counts = {};
 let filter = 'all';
 let unlocked = false;
-let accessToken = null;
-let boxFileId = null;
 let pinBuffer = '';
-let pinTarget = null;  // callback after PIN success
+let pinTarget = null;
 
 // ── INIT ─────────────────────────────────────────────────────────────
 window.addEventListener('load', () => {
   loadLocalCounts();
-  handleOAuthCallback();
+  loadFromBox();
 });
 
 // ── LOCAL STORAGE ────────────────────────────────────────────────────
@@ -642,58 +313,16 @@ function loadLocalCounts() {
     if (saved) counts = JSON.parse(saved);
   } catch(e) { counts = {}; }
 }
-
 function saveCounts() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(counts));
 }
 
-// ── BOX OAUTH ────────────────────────────────────────────────────────
-function handleOAuthCallback() {
-  const hash = window.location.hash;
-  if (hash && hash.includes('access_token')) {
-    const params = new URLSearchParams(hash.substring(1));
-    accessToken = params.get('access_token');
-    // Clean URL
-    history.replaceState(null, '', window.location.pathname);
-    setBoxConnected();
-    loadFromBox();
-  } else {
-    // Check if we had a token in session
-    const st = sessionStorage.getItem('box_token');
-    if (st) {
-      accessToken = st;
-      setBoxConnected();
-      loadFromBox();
-    }
-  }
-}
-
-function startBoxAuth() {
-  const url = `https://account.box.com/api/oauth2/authorize?response_type=token&client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`;
-  window.location.href = url;
-}
-
-function handleBoxBtn() {
-  if (accessToken) {
-    loadFromBox();
-  } else {
-    document.getElementById('connect-modal').classList.add('show');
-  }
-}
-
-function setBoxConnected() {
-  sessionStorage.setItem('box_token', accessToken);
-  const btn = document.getElementById('box-status');
-  btn.textContent = '🔄 Reload Box';
-  btn.className = 'connected';
-}
-
-// ── BOX API HELPERS ──────────────────────────────────────────────────
+// ── BOX API ──────────────────────────────────────────────────────────
 async function boxGet(url) {
   const r = await fetch('https://api.box.com/2.0' + url, {
-    headers: { Authorization: 'Bearer ' + accessToken }
+    headers: { Authorization: 'Bearer ' + DEV_TOKEN }
   });
-  if (!r.ok) throw new Error('Box API error: ' + r.status);
+  if (!r.ok) throw new Error('Box API error ' + r.status + ' — token may have expired');
   return r.json();
 }
 
@@ -719,34 +348,25 @@ async function findFile(folderId, pattern) {
   }
 }
 
-async function downloadFile(fileId) {
-  const info = await boxGet(`/files/${fileId}?fields=download_url`);
-  const r = await fetch(`https://api.box.com/2.0/files/${fileId}/content`, {
-    headers: { Authorization: 'Bearer ' + accessToken }
-  });
-  if (!r.ok) throw new Error('Download failed');
-  return r.arrayBuffer();
-}
-
-// ── LOAD FROM BOX ────────────────────────────────────────────────────
 async function loadFromBox() {
   showLoading('Connecting to Box…');
   try {
-    // Navigate folder path
     setMsg('Finding your folder…');
-    let folderId = '0'; // root
+    let folderId = '0';
     for (const name of FOLDER_PATH) {
       folderId = await findFolder(folderId, name);
-      if (!folderId) throw new Error(`Folder not found: "${name}"`);
+      if (!folderId) throw new Error('Folder not found: "' + name + '"');
     }
-
     setMsg('Finding your spreadsheet…');
     const file = await findFile(folderId, '2026 Plant Inventory Database');
     if (!file) throw new Error('Could not find 2026 Plant Inventory Database in Box');
-    boxFileId = file.id;
 
     setMsg('Downloading spreadsheet…');
-    const buf = await downloadFile(file.id);
+    const r = await fetch('https://api.box.com/2.0/files/' + file.id + '/content', {
+      headers: { Authorization: 'Bearer ' + DEV_TOKEN }
+    });
+    if (!r.ok) throw new Error('Download failed: ' + r.status);
+    const buf = await r.arrayBuffer();
 
     setMsg('Reading Label Maker sheet…');
     const wb = XLSX.read(buf, { type: 'array' });
@@ -757,7 +377,7 @@ async function loadFromBox() {
     parseRows(rows);
     hideLoading();
     showUI();
-    toast(`Loaded ${plants.length} plants from Box`);
+    toast('Loaded ' + plants.length + ' plants from Box');
   } catch(e) {
     hideLoading();
     toast('Error: ' + e.message, true);
@@ -766,38 +386,23 @@ async function loadFromBox() {
 }
 
 function parseRows(rows) {
-  // Row 0 = header, data starts row 1
-  // Expected cols: LabelLine1, LabelLine2, labelline3, LabelCount, Common Name, Scientific Name, Cultivar, Color
-  const header = rows[0] || [];
   const newPlants = [];
   let newCount = 0;
-
   for (let i = 1; i < rows.length; i++) {
     const r = rows[i];
-    if (!r || !r[0]) continue; // skip empty
+    if (!r || !r[0]) continue;
     const line1 = String(r[0] || '').trim();
     if (!line1 || line1.startsWith('Z_total')) continue;
-
     const line2 = String(r[1] || '').trim();
     const line3 = String(r[2] || '').trim();
-    const labelCount = parseInt(r[3]) || 0;
     const commonName = String(r[4] || '').trim();
     const sciName = String(r[5] || '').trim();
     const cultivar = String(r[6] || '').trim();
     const color = String(r[7] || '').trim();
-
-    const id = line1 + '|' + sciName; // stable ID
-
-    // Merge with existing counts
-    if (!(id in counts)) {
-      counts[id] = 0; // new plant starts at 0
-      newCount++;
-    }
-
-    newPlants.push({ id, line1, line2, line3, commonName, sciName, cultivar, color, labelCount });
+    const id = line1 + '|' + sciName;
+    if (!(id in counts)) { counts[id] = 0; newCount++; }
+    newPlants.push({ id, line1, line2, line3, commonName, sciName, cultivar, color });
   }
-
-  const prevIds = new Set(plants.map(p => p.id));
   plants = newPlants;
   saveCounts();
   updateSummary(newCount);
@@ -809,6 +414,7 @@ function showUI() {
   document.getElementById('toolbar').style.display = 'flex';
   document.getElementById('table-wrap').style.display = 'block';
   document.getElementById('print-bar').style.display = 'flex';
+  document.getElementById('box-status').className = 'connected';
   renderTable();
 }
 
@@ -819,7 +425,7 @@ function updateSummary(newCount) {
   document.getElementById('sum-total').textContent = total;
   document.getElementById('sum-labels').textContent = totalLabels;
   document.getElementById('sum-zero').textContent = zeroCount;
-  document.getElementById('sum-new').textContent = newCount !== undefined ? newCount : '—';
+  if (newCount !== undefined) document.getElementById('sum-new').textContent = newCount;
 }
 
 function setFilter(f, btn) {
@@ -833,21 +439,14 @@ function renderTable() {
   const q = document.getElementById('search').value.toLowerCase();
   const tbody = document.getElementById('plant-body');
   tbody.innerHTML = '';
-
   let visible = plants.filter(p => {
-    const matchQ = !q || p.line1.toLowerCase().includes(q)
-      || p.sciName.toLowerCase().includes(q)
-      || p.commonName.toLowerCase().includes(q)
-      || p.cultivar.toLowerCase().includes(q)
-      || p.color.toLowerCase().includes(q);
+    const matchQ = !q || p.line1.toLowerCase().includes(q) || p.sciName.toLowerCase().includes(q)
+      || p.commonName.toLowerCase().includes(q) || p.cultivar.toLowerCase().includes(q) || p.color.toLowerCase().includes(q);
     const cnt = counts[p.id] || 0;
     const matchF = filter === 'all' || (filter === 'zero' && cnt === 0) || (filter === 'has' && cnt > 0);
     return matchQ && matchF;
   });
-
-  document.getElementById('showing-count').innerHTML =
-    `Showing <strong>${visible.length}</strong> of <strong>${plants.length}</strong>`;
-
+  document.getElementById('showing-count').innerHTML = 'Showing <strong>' + visible.length + '</strong> of <strong>' + plants.length + '</strong>';
   if (visible.length === 0) {
     document.getElementById('empty-state').style.display = 'block';
     document.getElementById('plant-table').style.display = 'none';
@@ -855,65 +454,39 @@ function renderTable() {
   }
   document.getElementById('empty-state').style.display = 'none';
   document.getElementById('plant-table').style.display = 'table';
-
   visible.forEach(p => {
     const cnt = counts[p.id] || 0;
     const tr = document.createElement('tr');
     if (cnt === 0) tr.classList.add('zero-row');
-
-    tr.innerHTML = `
-      <td class="col-check"><input type="checkbox" class="row-check" data-id="${escHtml(p.id)}"></td>
-      <td>
-        <div class="plant-name">${escHtml(p.line1)}</div>
-        ${p.line2 ? `<div class="plant-detail">${escHtml(p.line2)}</div>` : ''}
-      </td>
-      <td><span class="plant-sci">${escHtml(p.sciName)}</span>${p.cultivar ? `<div class="plant-detail">${escHtml(p.cultivar)}</div>` : ''}</td>
-      <td><span class="plant-detail">${escHtml(p.color)}</span></td>
-      <td class="col-count">
-        <div class="count-controls">
-          <button class="count-btn decrement" onclick="changeCount('${escHtml(p.id)}',-1)" ${!unlocked?'disabled':''}>−</button>
-          <span class="count-val ${cnt===0?'zero':''}" id="cv-${escHtml(p.id)}">${cnt}</span>
-          <button class="count-btn increment" onclick="changeCount('${escHtml(p.id)}',1)" ${!unlocked?'disabled':''}>+</button>
-        </div>
-      </td>
-      <td class="col-print-qty" style="text-align:center">
-        <input class="print-qty" type="number" min="1" value="${cnt>0?cnt:1}" id="pq-${escHtml(p.id)}" ${!unlocked?'disabled':''}>
-      </td>
-      <td class="col-actions">
-        <button class="print-row-btn" onclick="printSingle('${escHtml(p.id)}')" ${!unlocked?'disabled':''}>🖨 Print Labels</button>
-      </td>
-    `;
+    const eid = esc(p.id);
+    tr.innerHTML =
+      '<td class="col-check"><input type="checkbox" class="row-check" data-id="' + eid + '"></td>' +
+      '<td><div class="plant-name">' + esc(p.line1) + '</div>' + (p.line2 ? '<div class="plant-detail">' + esc(p.line2) + '</div>' : '') + '</td>' +
+      '<td><span class="plant-sci">' + esc(p.sciName) + '</span>' + (p.cultivar ? '<div class="plant-detail">' + esc(p.cultivar) + '</div>' : '') + '</td>' +
+      '<td><span class="plant-detail">' + esc(p.color) + '</span></td>' +
+      '<td class="col-count"><div class="count-controls">' +
+        '<button class="count-btn decrement" onclick="changeCount(\'' + eid + '\',-1)" ' + (!unlocked?'disabled':'') + '>−</button>' +
+        '<span class="count-val ' + (cnt===0?'zero':'') + '" id="cv-' + eid + '">' + cnt + '</span>' +
+        '<button class="count-btn" onclick="changeCount(\'' + eid + '\',1)" ' + (!unlocked?'disabled':'') + '>+</button>' +
+      '</div></td>' +
+      '<td class="col-print-qty" style="text-align:center"><input class="print-qty" type="number" min="1" value="' + (cnt>0?cnt:1) + '" id="pq-' + eid + '" ' + (!unlocked?'disabled':'') + '></td>' +
+      '<td class="col-actions"><button class="print-row-btn" onclick="printSingle(\'' + eid + '\')" ' + (!unlocked?'disabled':'') + '>🖨 Print Labels</button></td>';
     tbody.appendChild(tr);
   });
-
-  // Update selection info
   updateSelectionInfo();
 }
 
-function escHtml(str) {
-  return String(str).replace(/[&<>"']/g, c =>
-    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function esc(str) {
+  return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 
-// ── COUNT CHANGES ────────────────────────────────────────────────────
+// ── COUNTS ───────────────────────────────────────────────────────────
 function changeCount(id, delta) {
   if (!unlocked) { promptPin(); return; }
-  const cur = counts[id] || 0;
-  const next = Math.max(0, cur + delta);
-  counts[id] = next;
+  counts[id] = Math.max(0, (counts[id] || 0) + delta);
   saveCounts();
-  // Update just the value span
   const span = document.getElementById('cv-' + id);
-  if (span) {
-    span.textContent = next;
-    span.className = 'count-val' + (next === 0 ? ' zero' : '');
-  }
-  // Update row class
-  const btn = document.querySelector(`[data-id="${id}"]`);
-  if (btn) {
-    const tr = btn.closest('tr');
-    if (tr) tr.className = next === 0 ? 'zero-row' : '';
-  }
+  if (span) { span.textContent = counts[id]; span.className = 'count-val' + (counts[id]===0?' zero':''); }
   updateSummary();
 }
 
@@ -923,19 +496,11 @@ function toggleSelectAll() {
   document.querySelectorAll('.row-check').forEach(cb => cb.checked = all);
   updateSelectionInfo();
 }
-
 function updateSelectionInfo() {
-  const selected = document.querySelectorAll('.row-check:checked');
-  document.getElementById('selected-info').textContent =
-    selected.length > 0
-      ? `${selected.length} plant${selected.length > 1 ? 's' : ''} selected`
-      : 'Select plants above to print labels';
+  const n = document.querySelectorAll('.row-check:checked').length;
+  document.getElementById('selected-info').textContent = n > 0 ? n + ' plant' + (n>1?'s':'') + ' selected' : 'Select plants above to print labels';
 }
-
-document.addEventListener('change', e => {
-  if (e.target.classList.contains('row-check')) updateSelectionInfo();
-});
-
+document.addEventListener('change', e => { if (e.target.classList.contains('row-check')) updateSelectionInfo(); });
 function clearSelection() {
   document.querySelectorAll('.row-check').forEach(cb => cb.checked = false);
   document.getElementById('select-all').checked = false;
@@ -947,19 +512,14 @@ function printSingle(id) {
   if (!unlocked) { promptPin(() => printSingle(id)); return; }
   const p = plants.find(x => x.id === id);
   if (!p) return;
-  const qtyEl = document.getElementById('pq-' + id);
-  const qty = parseInt(qtyEl?.value) || 1;
+  const qty = parseInt(document.getElementById('pq-' + id)?.value) || 1;
   generatePDF([{ plant: p, qty }]);
-  // Increment count
   counts[id] = (counts[id] || 0) + qty;
   saveCounts();
   const span = document.getElementById('cv-' + id);
-  if (span) {
-    span.textContent = counts[id];
-    span.className = 'count-val';
-  }
+  if (span) { span.textContent = counts[id]; span.className = 'count-val'; }
   updateSummary();
-  toast(`Printed ${qty} label${qty>1?'s':''} for ${p.line1}`);
+  toast('Printed ' + qty + ' label' + (qty>1?'s':'') + ' for ' + p.line1);
 }
 
 function printSelected() {
@@ -968,68 +528,38 @@ function printSelected() {
   if (checked.length === 0) { toast('No plants selected', true); return; }
   const items = [];
   checked.forEach(cb => {
-    const id = cb.dataset.id;
-    const p = plants.find(x => x.id === id);
+    const p = plants.find(x => x.id === cb.dataset.id);
     if (!p) return;
-    const qtyEl = document.getElementById('pq-' + id);
-    const qty = parseInt(qtyEl?.value) || 1;
+    const qty = parseInt(document.getElementById('pq-' + cb.dataset.id)?.value) || 1;
     items.push({ plant: p, qty });
   });
   generatePDF(items);
-  // Increment counts
-  items.forEach(({ plant, qty }) => {
-    counts[plant.id] = (counts[plant.id] || 0) + qty;
-  });
+  items.forEach(({ plant, qty }) => { counts[plant.id] = (counts[plant.id] || 0) + qty; });
   saveCounts();
   updateSummary();
   renderTable();
-  toast(`Printed labels for ${items.length} plant type${items.length>1?'s':''}`);
+  toast('Printed labels for ' + items.length + ' plant type' + (items.length>1?'s':''));
 }
 
-// ── PDF GENERATION (Avery 5266) ──────────────────────────────────────
 function generatePDF(items) {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ unit: 'pt', format: 'letter' });
-
-  let col = 0, row = 0;
-  let pageFirst = true;
-
-  // Expand items into individual label slots
+  let col = 0, row = 0, pageFirst = true;
   const labels = [];
-  items.forEach(({ plant, qty }) => {
-    for (let i = 0; i < qty; i++) labels.push(plant);
-  });
-
+  items.forEach(({ plant, qty }) => { for (let i = 0; i < qty; i++) labels.push(plant); });
   labels.forEach((p, idx) => {
-    if (!pageFirst && idx % (COLS * ROWS) === 0) {
-      doc.addPage();
-      col = 0; row = 0;
-    }
+    if (!pageFirst && idx % (COLS * ROWS) === 0) { doc.addPage(); col = 0; row = 0; }
     pageFirst = false;
-
     const x = LEFT_M + col * (LBL_W + COL_GAP);
     const y = TOP_M + row * LBL_H;
-
-    // L1
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(10);
-    doc.text(p.line1, x + PAD, y + 13, { maxWidth: LBL_W - PAD * 2 });
-
-    // L2
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(9);
-    if (p.line2) doc.text(p.line2, x + PAD, y + 25, { maxWidth: LBL_W - PAD * 2 });
-
-    // L3
-    doc.setFont('helvetica', 'italic');
-    doc.setFontSize(8);
-    if (p.line3) doc.text(p.line3, x + PAD, y + 36, { maxWidth: LBL_W - PAD * 2 });
-
-    col++;
-    if (col >= COLS) { col = 0; row++; }
-    if (row >= ROWS) { row = 0; }
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(10);
+    doc.text(p.line1, x + PAD, y + 13, { maxWidth: LBL_W - PAD*2 });
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
+    if (p.line2) doc.text(p.line2, x + PAD, y + 25, { maxWidth: LBL_W - PAD*2 });
+    doc.setFont('helvetica', 'italic'); doc.setFontSize(8);
+    if (p.line3) doc.text(p.line3, x + PAD, y + 36, { maxWidth: LBL_W - PAD*2 });
+    col++; if (col >= COLS) { col = 0; row++; } if (row >= ROWS) { row = 0; }
   });
-
   doc.save('MG_PlantSale_Labels.pdf');
 }
 
@@ -1040,83 +570,48 @@ function toggleLock() {
     document.getElementById('lock-indicator').textContent = '🔒 View Only';
     document.getElementById('lock-indicator').classList.remove('unlocked');
     renderTable();
-  } else {
-    promptPin();
-  }
+  } else { promptPin(); }
 }
-
 function promptPin(callback) {
-  pinBuffer = '';
-  pinTarget = callback || null;
+  pinBuffer = ''; pinTarget = callback || null;
   updatePinDots();
   document.getElementById('pin-error').textContent = '';
   document.getElementById('pin-modal').classList.add('show');
 }
-
-function closePin() {
-  document.getElementById('pin-modal').classList.remove('show');
-  pinBuffer = '';
-  pinTarget = null;
-}
-
+function closePin() { document.getElementById('pin-modal').classList.remove('show'); pinBuffer = ''; pinTarget = null; }
 function pinPress(key) {
-  if (key === '←') {
-    pinBuffer = pinBuffer.slice(0, -1);
-  } else if (key === '✕') {
-    pinBuffer = '';
-  } else {
-    if (pinBuffer.length >= 4) return;
-    pinBuffer += key;
-  }
+  if (key === '←') pinBuffer = pinBuffer.slice(0,-1);
+  else if (key === '✕') pinBuffer = '';
+  else { if (pinBuffer.length >= 4) return; pinBuffer += key; }
   updatePinDots();
-  if (pinBuffer.length === 4) {
-    setTimeout(checkPin, 120);
-  }
+  if (pinBuffer.length === 4) setTimeout(checkPin, 120);
 }
-
 function updatePinDots() {
-  for (let i = 0; i < 4; i++) {
-    document.getElementById('dot-' + i).classList.toggle('filled', i < pinBuffer.length);
-  }
+  for (let i = 0; i < 4; i++) document.getElementById('dot-'+i).classList.toggle('filled', i < pinBuffer.length);
 }
-
 function checkPin() {
   if (pinBuffer === PIN) {
     unlocked = true;
     document.getElementById('lock-indicator').innerHTML = '🔓 Editing';
     document.getElementById('lock-indicator').classList.add('unlocked');
     document.getElementById('pin-modal').classList.remove('show');
-    const cb = pinTarget;
-    pinBuffer = ''; pinTarget = null;
-    renderTable();
-    if (cb) cb();
+    const cb = pinTarget; pinBuffer = ''; pinTarget = null;
+    renderTable(); if (cb) cb();
   } else {
     document.getElementById('pin-error').textContent = 'Incorrect PIN. Try again.';
-    pinBuffer = '';
-    updatePinDots();
+    pinBuffer = ''; updatePinDots();
   }
 }
 
-// ── LOADING ──────────────────────────────────────────────────────────
-function showLoading(msg) {
-  document.getElementById('loading-msg').textContent = msg || 'Loading…';
-  document.getElementById('loading-screen').classList.remove('hidden');
-}
-function setMsg(msg) {
-  document.getElementById('loading-msg').textContent = msg;
-}
-function hideLoading() {
-  document.getElementById('loading-screen').classList.add('hidden');
-}
-
-// ── TOAST ────────────────────────────────────────────────────────────
+// ── LOADING / TOAST ──────────────────────────────────────────────────
+function showLoading(msg) { document.getElementById('loading-msg').textContent = msg||'Loading…'; document.getElementById('loading-screen').classList.remove('hidden'); }
+function setMsg(msg) { document.getElementById('loading-msg').textContent = msg; }
+function hideLoading() { document.getElementById('loading-screen').classList.add('hidden'); }
 let toastTimer;
 function toast(msg, err) {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'show' + (err ? ' error' : '');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.className = '', 3200);
+  t.textContent = msg; t.className = 'show' + (err?' error':'');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.className = '', 3200);
 }
 </script>
 </body>
