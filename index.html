@@ -95,17 +95,7 @@ header p  { font-size: 12px; color: rgba(255,255,255,0.65); margin-top: 2px; fon
     <h2>Label Request Summary</h2>
     <div class="subtitle" id="modalSubtitle"></div>
     <div class="summary-list" id="summaryList"></div>
-    <label style="font-size:13px;color:var(--text-light);display:block;margin-bottom:6px;">Device</label>
-    <select class="printer-sel" id="deviceSel" style="margin-bottom:10px;">
-      <option value="standard">Mac / iPhone / Windows</option>
-      <option value="android">Android Phone</option>
-    </select>
-    <label style="font-size:13px;color:var(--text-light);display:block;margin-bottom:6px;">Printer</label>
-    <select class="printer-sel" id="printerSel">
-      <option value="officejet">HP Officejet</option>
-      <option value="envy">HP Envy</option>
-      <option value="cce">CCE Laser Printer (TBD)</option>
-    </select>
+
     <div class="modal-btns">
       <button class="btn-cancel" onclick="closeModal()">Back</button>
       <button class="btn-download" id="dlBtn" onclick="generatePDF()">&#11015; Download Labels</button>
@@ -120,10 +110,10 @@ const PLANTS = [{"id": 0, "name": "African Blue Basil", "sci": "Ocimum kilimands
 const qty = {};
 
 const PAGE_W  = 612,   PAGE_H  = 792;
-const TOP_M   = 20,    LEFT_M  = 43.5;
-const LBL_W   = 247.5, LBL_H  = 48;
-const COL_GAP = 45;
-const COLS    = 2,     ROWS   = 15;
+const TOP_M   = 43.92,    LEFT_M  = 38.16;
+const LBL_W   = 247.68, LBL_H   = 48.24;
+const COL_GAP = 40.32;
+const COLS    = 2,     ROWS    = 15;
 const PAD     = 2;
 const MAX_W   = LBL_W - PAD * 2;
 
@@ -209,24 +199,7 @@ function closeModal() { document.getElementById('modalBg').className = 'modal-bg
 function handleModalBgClick(e) { if (e.target===document.getElementById('modalBg')) closeModal(); }
 
 function generatePDF() {
-  // Base margins for HP Officejet on Mac/iPhone/Windows
-  const BASE_TOP  = 42.5;
-  const BASE_LEFT = 43.5;
-  // Printer offsets (points)
-  const printerOffsets = {
-    officejet: { top: 0,    left: 0   },
-    envy:      { top: -4.5, left: -4.5 },
-    cce:       { top: 0,    left: 0   }  // TBD
-  };
-  // Device offsets (points)
-  const deviceOffsets = {
-    standard: { top: 0,     left: 0  },
-    android:  { top: -49.5, left: -18 }
-  };
-  const printer = document.getElementById('printerSel').value;
-  const device  = document.getElementById('deviceSel').value;
-  const TOP_M  = BASE_TOP  + printerOffsets[printer].top  + deviceOffsets[device].top;
-  const LEFT_M = BASE_LEFT + printerOffsets[printer].left + deviceOffsets[device].left;
+  // Using exact Avery 5266 template coordinates — device/printer independent
   const btn = document.getElementById('dlBtn');
   const status = document.getElementById('statusMsg');
   btn.disabled = true;
